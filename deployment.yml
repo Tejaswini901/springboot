@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring10
+  labels:
+    app: spring10
+    service: spring10
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+    nodePort: 30002
+  selector:
+    app: spring10
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: spring10
+
+  name: spring10
+
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: spring10
+
+  template: 
+    metadata: 
+      labels: 
+        app: spring10
+
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: spring.datasource.url
+              value: "jdbc:mysql://mysql/notes_app?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false"
+            - 
+              name: spring.datasource.username
+              value: root
+            -
+              name: spring.datasource.password
+              value: root
+            - 
+              name: spring.jpa.properties.hibernate.dialect
+              value: org.hibernate.dialect.MySQL5InnoDBDialect
+            - 
+              name: spring.jpa.hibernate.ddl-auto
+              value: update
+          image: usernew/spring10:latest
+          name: spring10
+          imagePullPolicy: IfNotPresent
+          ports: 
+            - 
+              containerPort: 8080
+
+
+        
+
+      	
